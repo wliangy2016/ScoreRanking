@@ -68,8 +68,8 @@ namespace ScoreRanking
 		TEST_METHOD(Constructor)
 		{
 			//Default constructor
-			Ranking* test1(new Ranking());
-			Assert::IsTrue(test1 != nullptr);
+			unique_ptr<Ranking> test1(new Ranking());
+			Assert::IsTrue(test1.get() != nullptr);
 			Assert::IsTrue(test1->GetImportFileName().empty());
 
 			//Parameterized constructor
