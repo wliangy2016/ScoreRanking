@@ -6,6 +6,7 @@
 #include <windows.h>
 #include <tchar.h>
 #include <stdio.h>
+#include <memory>
 #include <strsafe.h>
 #include "Ranking.h"
 
@@ -37,7 +38,7 @@ namespace ScoreRanking
 
 		bErrorFlag = WriteFile(
 			hFile,           // open file handle
-			data,      // start of data to write
+			data,            // start of data to write
 			dwBytesToWrite,  // number of bytes to write
 			&dwBytesWritten, // number of bytes that were written
 			NULL);            // no overlapped structure
@@ -73,15 +74,15 @@ namespace ScoreRanking
 
 			//Parameterized constructor
 			wstring file = L"test.txt";
-			Ranking* test2(new Ranking(file));
-			Assert::IsTrue(test2 != nullptr);
+			unique_ptr<Ranking> test2(new Ranking(file));
+			Assert::IsTrue(test2.get() != nullptr);
 			Assert::AreEqual(file, test2->GetImportFileName());
 		}
 
 		TEST_METHOD(SetImportFileName)
 		{
-			Ranking* test(new Ranking());
-			Assert::IsTrue(test != nullptr);
+			unique_ptr<Ranking> test(new Ranking());
+			Assert::IsTrue(test.get() != nullptr);
 
 			wstring file1 = L"";
 			bool ok1 = test->SetImportFileName(file1);
@@ -105,8 +106,8 @@ namespace ScoreRanking
 
 			GenerateTestFile(file1, data1);
 
-			Ranking* test1(new Ranking(file1));
-			Assert::IsTrue(test1 != nullptr);
+			unique_ptr<Ranking> test1(new Ranking(file1));
+			Assert::IsTrue(test1.get() != nullptr);
 
 			bool ok1 = test1->Execute();
 			Assert::IsTrue(ok1);
@@ -125,8 +126,8 @@ namespace ScoreRanking
 
 			GenerateTestFile(file2, data2);
 
-			Ranking* test2(new Ranking(file2));
-			Assert::IsTrue(test2 != nullptr);
+			unique_ptr<Ranking> test2(new Ranking(file2));
+			Assert::IsTrue(test2.get() != nullptr);
 
 			bool ok2 = test2->Execute();
 			Assert::IsFalse(ok2);
